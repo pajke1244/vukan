@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kalkulator Perionice</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e8ecef;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-top: 20px;
+    }
+    .step {
+      display: none;
+    }
+    .step.active {
+      display: block;
+    }
+    h2 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    button {
+      flex: 1;
+      margin: 5px;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .next { background-color: #007AFF; color: white; }
+    .back { background-color: #aaa; color: white; }
+    .reset { background-color: #f44336; color: white; }
+    .calculate { background-color: #4CAF50; color: white; }
+    .result {
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    .table-wrapper {
+      margin-top: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #007AFF;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Kalkulator Perionice</h2>
+
+    <div id="step0" class="step active">
+      <label>Ime klijenta:</label>
+      <input type="text" id="klijent" placeholder="Unesite ime"/>
+      <label>Napomena:</label>
+      <textarea id="napomena" placeholder="Unesite napomenu..."></textarea>
+    </div>
+
+    <div id="step1" class="step">
+      <label>Model perionice:</label>
+      <select id="model">
+        <option value="15000">Classic - 15000</option>
+        <option value="20000">V model - 20000</option>
+        <option value="25000">7 model - 25000</option>
+      </select>
+      <label>Broj pokrivenih boxova:</label>
+      <input type="number" id="pokriveniBoxovi" value="0"/>
+    </div>
+
+    <div id="step2" class="step">
+      <label>Broj otkrivenih boxova:</label>
+      <input type="number" id="otkriveniBoxovi" value="0"/>
+      <label>Opcija:</label>
+      <select id="opcijaOtkriveni">
+        <option value="5000">Opcija 1 (5000)</option>
+        <option value="10000">Opcija 2 (10000)</option>
+      </select>
+      <label>Tehnička soba:</label>
+      <select id="tehnicka">
+        <option value="0">Ne</option>
+        <option value="4000">Da</option>
+      </select>
+    </div>
+
+    <div id="step3" class="step">
+      <label>Kamionski box (kom):</label><input type="number" id="kamionBox" value="0"/>
+      <label>Kontejner:</label><input type="number" id="kontejner" value="0"/>
+      <label>Konstrukcija:</label><input type="number" id="konstrukcija" value="0"/>
+      <label>Mikro prah / vosak / ispiranje:</label><input type="number" id="mikro" value="0"/>
+      <label>Turbo pena:</label><input type="number" id="pena" value="0"/>
+      <label>Četka:</label><input type="number" id="cetka" value="0"/>
+    </div>
+
+    <div id="step4" class="step">
+      <label>Podno pranje:</label><input type="number" id="podno" value="0"/>
+      <label>Usisivač:</label><input type="number" id="usisivac" value="0"/>
+      <label>Sušač:</label><input type="number" id="susac" value="0"/>
+      <label>Datamat opcija:</label>
+      <select id="datamat">
+        <option value="0">-- Izaberi --</option>
+        <option value="500">Žeton</option>
+        <option value="700">Kartica</option>
+        <option value="800">Novac</option>
+        <option value="1200">Žeton + Kartica</option>
+        <option value="1300">Žeton + Novac</option>
+        <option value="1301">Kartica + Novac</option>
+        <option value="2000">Sve zajedno</option>
+      </select>
+      <input type="number" id="kolicinaDatamat" placeholder="Količina" value="0"/>
+    </div>
+
+    <div id="step5" class="step">
+      <label>Menjačnica:</label><input type="number" id="menjacnica" value="0"/>
+      <label>Ram za patosnice:</label><input type="number" id="ramPatosnice" value="0"/>
+      <label>Otresač:</label><input type="number" id="otresac" value="0"/>
+      <label>Česma:</label><input type="number" id="cesma" value="0"/>
+      <label>Ram sa rešetkama:</label><input type="number" id="resetke" value="0"/>
+
+      <div class="buttons">
+        <button class="reset" onclick="resetuj()">Resetuj</button>
+        <button class="calculate" onclick="izracunaj()">Izračunaj</button>
+      </div>
+      <div class="result" id="ukupno"></div>
+      <div class="table-wrapper" id="rezultat-tabela"></div>
+    </div>
+
+    <div class="buttons">
+      <button class="back" onclick="changeStep(-1)">Nazad</button>
+      <button class="next" onclick="changeStep(1)">Dalje</button>
+    </div>
+  </div>
+
+<script>
+let currentStep = 0;
+function changeStep(dir) {
+  document.getElementById('step' + currentStep).classList.remove('active');
+  currentStep += dir;
+  currentStep = Math.max(0, Math.min(5, currentStep));
+  document.getElementById('step' + currentStep).classList.add('active');
+}
+
+function resetuj() {
+  document.querySelectorAll('input, textarea').forEach(e => e.value = '');
+  document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+  document.getElementById('ukupno').innerText = '';
+  document.getElementById('rezultat-tabela').innerHTML = '';
+  changeStep(-currentStep);
+}
+
+function izracunaj() {
+  const get = id => parseInt(document.getElementById(id).value) || 0;
+
+  const data = [
+    ['Model * Boxovi -20%', get('pokriveniBoxovi'), (get('model') * get('pokriveniBoxovi') * 0.8)],
+    ['Otkriveni boxovi', get('otkriveniBoxovi'), (get('otkriveniBoxovi') * get('opcijaOtkriveni'))],
+    ['Tehnička soba', get('tehnicka') ? 1 : 0, get('tehnicka')],
+    ['Kamionski box', get('kamionBox'), get('kamionBox') * 3000],
+    ['Kontejner', get('kontejner'), get('kontejner') * 5500],
+    ['Konstrukcija', get('konstrukcija'), get('konstrukcija') * 3500],
+    ['Mikro prah', get('mikro'), get('mikro') * 7000],
+    ['Turbo pena', get('pena'), get('pena') * 3000],
+    ['Četka', get('cetka'), get('cetka') * 2500],
+    ['Podno pranje', get('podno'), get('podno') * 4700],
+    ['Usisivač', get('usisivac'), get('usisivac') * 8000],
+    ['Sušač', get('susac'), get('susac') * 3500],
+    ['Datamat', get('kolicinaDatamat'), get('datamat') * get('kolicinaDatamat')],
+    ['Menjačnica', get('menjacnica'), get('menjacnica') * 500],
+    ['Ram za patosnice', get('ramPatosnice'), get('ramPatosnice') * 2500],
+    ['Otresač', get('otresac'), get('otresac') * 1500],
+    ['Česma', get('cesma'), get('cesma') * 1000],
+    ['Ram sa rešetkama', get('resetke'), get('resetke') * 2700]
+  ];
+
+  const filtered = data.filter(row => row[1] > 0);
+  const total = filtered.reduce((sum, row) => sum + row[2], 0);
+
+  document.getElementById('ukupno').innerText = `Ukupna cena: € ${total.toLocaleString('de-DE')}`;
+
+  let tabelaHTML = `
+    <table>
+      <thead><tr><th>Stavka</th><th>Količina</th><th>Cena (€)</th></tr></thead>
+      <tbody>
+        ${filtered.map(row => `
+          <tr>
+            <td>${row[0]}</td>
+            <td>${row[1]}</td>
+            <td>${row[2].toLocaleString('de-DE', { minimumFractionDigits: 2 })}</td>
+          </tr>`).join('')}
+      </tbody>
+    </table>
+  `;
+  document.getElementById('rezultat-tabela').innerHTML = tabelaHTML;
+}
+</script>
+</body>
+</html>
